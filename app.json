@@ -29,6 +29,7 @@
     },
     "plugins": [
       "expo-router",
+      "@rnmapbox/maps",
       [
         "expo-splash-screen",
         {
@@ -41,6 +42,7 @@
           }
         }
       ]
+      
     ],
     "experiments": {
       "typedRoutes": true,
