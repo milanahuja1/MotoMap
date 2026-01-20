@@ -7,12 +7,16 @@
     "icon": "./assets/images/icon.png",
     "scheme": "motomap",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.MotoMap"
+      "bundleIdentifier": "com.anonymous.MotoMap",
+      "infoPlist": {
+  "NSLocationWhenInUseUsageDescription": "Your location is used to show your position on the map."
+}
     },
     "android": {
+      "permissions": ["ACCESS_FINE_LOCATION"],
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
