@@ -12,11 +12,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.MotoMap",
       "infoPlist": {
-  "NSLocationWhenInUseUsageDescription": "Your location is used to show your position on the map."
-}
+        "NSLocationWhenInUseUsageDescription": "Your location is used to show your position on the map."
+      }
     },
     "android": {
-      "permissions": ["ACCESS_FINE_LOCATION"],
+      "permissions": [
+        "ACCESS_FINE_LOCATION"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -32,10 +34,17 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": true,
+          "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
+        }
+      ],
       "expo-router",
       "@rnmapbox/maps",
       [
-      "expo-location",
+        "expo-location",
         {
           "locationWhenInUsePermission": "Show current location on map."
         }
@@ -51,8 +60,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
-      
+      ],
+      "expo-maps"
     ],
     "experiments": {
       "typedRoutes": true,
