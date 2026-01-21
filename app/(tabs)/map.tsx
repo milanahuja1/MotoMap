@@ -9,12 +9,17 @@ Mapbox.setTelemetryEnabled(false);
 
 
 export default function MapScreen() {
-  const [query, onChangeText] = React.useState('');
+  const [query, setQuery] = React.useState('');
+    const handleSearchChange = (text: string) => {
+    setQuery(text);
+    console.log('User typed:', text);
+  };
+
 return (
 <View style={styles.container}>
       <Map />
       <View style={styles.searchContainer}>
-        <SearchBar value={query} onChangeText={onChangeText} />
+        <SearchBar value={query} onQuery={handleSearchChange} />
       </View>
     </View>
   );
@@ -29,17 +34,17 @@ function Map(){
 }
 function SearchBar({
   value,
-  onChangeText,
+  onQuery,
 }: {
   value: string;
-  onChangeText: (text: string) => void;
+  onQuery: (text: string) => void;
 }) {
   return (
     <TextInput
       placeholder="Search for a destination"
       style={styles.searchBox}
       value={value}
-      onChangeText={onChangeText}
+      onChangeText={onQuery}
     />
   );
 }
