@@ -1,19 +1,32 @@
 import Mapbox, { Camera, LocationPuck, MapView } from "@rnmapbox/maps";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, TextInput, View } from 'react-native';
 
 Mapbox.setAccessToken("pk.eyJ1IjoibWlsYW5haHVqYSIsImEiOiJjbWttOHpneWowZHB6M2Nvdm1keDczZjk1In0.KGzKZ1ywfzsMES3djPQRLw");
 Mapbox.setTelemetryEnabled(false);
 
 
-
+const API_ENDPOINT = `https://randomuser.me/api/?results=30`;
 
 export default function MapScreen() {
-  const [query, setQuery] = React.useState('');
+  const [query, setQuery] = useState('');
+  const [data, setData] = useState([]);
     const handleSearchChange = (text: string) => {
     setQuery(text);
+    fetchData(API_ENDPOINT)
     console.log('User typed:', text);
   };
+
+  const fetchData = async (url: string) => {
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+      setData(json.results); 
+      console.log(json.results);
+    }
+      catch (error) {
+      console.log(error);
+    }};
 
 return (
 <View style={styles.container}>
