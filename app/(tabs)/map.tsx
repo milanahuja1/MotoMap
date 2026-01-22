@@ -61,9 +61,11 @@ function SearchList({ data }: { data: any[] }) {
       data={data}
       keyExtractor={(item) => item.login.username}
       renderItem={({ item }) => (
-        <View>
-          <Text>{item.name.first} {item.name.last}</Text>
-          <Text>{item.email}</Text>
+        <View style={styles.listItem}>
+          <Text style={styles.nameText}>
+            {item.name.first} {item.name.last}
+          </Text>
+          <Text style={styles.emailText}>{item.email}</Text>
         </View>
       )}
     />
@@ -109,5 +111,22 @@ const styles = StyleSheet.create({
             height: 50,
             backgroundColor: 'white',
             borderRadius: 10,
-            paddingHorizontal: 12, }
+            paddingHorizontal: 12, },
+  listItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  nameText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+  },
+  emailText: {
+    fontSize: 13,
+    color: '#666',
+    marginTop: 2,
+  },
 });
