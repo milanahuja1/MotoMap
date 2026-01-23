@@ -1,6 +1,6 @@
 import Mapbox, { Camera, LocationPuck, MapView } from "@rnmapbox/maps";
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 Mapbox.setAccessToken("pk.eyJ1IjoibWlsYW5haHVqYSIsImEiOiJjbWttOHpneWowZHB6M2Nvdm1keDczZjk1In0.KGzKZ1ywfzsMES3djPQRLw");
 Mapbox.setTelemetryEnabled(false);
@@ -27,6 +27,10 @@ export default function MapScreen() {
     console.log('User typed:', text);
   };
 
+  const handleBack = () => {
+    setQuery('');
+  };
+
   const fetchData = async (url: string) => {
     try {
       const response = await fetch(url);
@@ -49,8 +53,8 @@ return (
 <View style={styles.container}>
       <Map />
       <View style={styles.searchContainer}>
-        <SearchBar value={query} onQuery={handleSearchChange} />
-        <SearchList data={data} query={query} />
+        <SearchBar value={query} onQuery={handleSearchChange} onBack={handleBack} />
+        {query.length > 0 && <SearchList data={data} />}
       </View>
     </View>
   );
@@ -82,17 +86,36 @@ function Map(){
 function SearchBar({
   value,
   onQuery,
+  onBack,
 }: {
   value: string;
   onQuery: (text: string) => void;
+  onBack: () => void;
 }) {
+  const inputRef = useRef<TextInput>(null);
+  const [isFocused, setIsFocused] = useState(false);
   return (
-    <TextInput
-      placeholder="Search for a destination"
-      style={styles.searchBox}
-      value={value}
-      onChangeText={onQuery}
-    />
+    <View style={styles.searchRow}>
+      {isFocused && (
+        <Pressable
+          onPress={() => {
+            inputRef.current?.blur();
+            onBack();
+          }}
+        >
+          <Text style={styles.backArrow}>←</Text>
+        </Pressable>
+      )}
+      <TextInput
+        ref={inputRef}
+        placeholder="Search for a destination"
+        style={styles.searchBox}
+        value={value}
+        onChangeText={onQuery}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      />
+    </View>
   );
 }
 
@@ -100,8 +123,21 @@ function SearchBar({
 const styles = StyleSheet.create({
     container: {
     flex: 1,
-  }
-  ,searchContainer: {
+  },
+  searchRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: 'white',
+  borderRadius: 10,
+  paddingHorizontal: 8,
+  height: 50,
+},
+
+backArrow: {
+  fontSize: 20,
+  marginRight: 8,
+},
+searchContainer: {
     position: 'absolute',
     top: 50,
     left: 16,
