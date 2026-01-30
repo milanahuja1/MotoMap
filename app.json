@@ -54,7 +54,8 @@
           }
         }
       ],
-      "expo-maps"
+      "expo-maps",
+      "@maplibre/maplibre-react-native"
     ],
     "experiments": {
       "typedRoutes": true,

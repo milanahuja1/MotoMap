@@ -1,9 +1,10 @@
-import Mapbox, { Camera, LocationPuck, MapView } from "@rnmapbox/maps";
+import { Camera, MapView, UserLocation } from "@maplibre/maplibre-react-native";
+import * as Location from 'expo-location';
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-Mapbox.setAccessToken("pk.eyJ1IjoibWlsYW5haHVqYSIsImEiOiJjbWttOHpneWowZHB6M2Nvdm1keDczZjk1In0.KGzKZ1ywfzsMES3djPQRLw");
-Mapbox.setTelemetryEnabled(false);
+//Mapbox.setAccessToken("pk.eyJ1IjoibWlsYW5haHVqYSIsImEiOiJjbWttOHpneWowZHB6M2Nvdm1keDczZjk1In0.KGzKZ1ywfzsMES3djPQRLw");
+//Mapbox.setTelemetryEnabled(false);
 
 
 const API_ENDPOINT = `https://randomuser.me/api/?results=30`;
@@ -14,6 +15,18 @@ export default function MapScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [fullData, setFullData] = useState([]);
+
+  
+
+useEffect(() => {
+  (async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Location permission denied');
+      return;
+    }
+  })();
+}, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -77,10 +90,17 @@ function SearchList({ data }: { data: any[] }) {
 }
 function Map(){
   return(
-<MapView style={StyleSheet.absoluteFillObject}>
-          <Camera zoomLevel={14} followUserLocation={true} />
-          <LocationPuck puckBearingEnabled={true}/>
-      </MapView>
+    <MapView
+      style={StyleSheet.absoluteFillObject}
+      mapStyle="https://api.maptiler.com/maps/streets/style.json?key=ZsqcDdYmq64sYztIuuag"
+    >
+      <UserLocation visible />
+
+      <Camera
+        followUserLocation
+        followZoomLevel={14}
+      />
+    </MapView>
   );
 }
 function SearchBar({
