@@ -12,7 +12,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.MotoMap",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Your location is used to show your position on the map."
+        "NSLocationWhenInUseUsageDescription": "Your location is used to show your position on the map.",
+                "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true}
       }
     },
     "android": {

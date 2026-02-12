@@ -1,12 +1,9 @@
 import { Camera, MapView, UserLocation } from "@maplibre/maplibre-react-native";
 import * as Location from 'expo-location';
+import { router } from 'expo-router';
 import React, { useEffect, useRef, useState, } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import SearchDropdown from '../../components/search-dropdown';
-
-//Mapbox.setAccessToken("pk.eyJ1IjoibWlsYW5haHVqYSIsImEiOiJjbWttOHpneWowZHB6M2Nvdm1keDczZjk1In0.KGzKZ1ywfzsMES3djPQRLw");
-//Mapbox.setTelemetryEnabled(false);
-
 
 const API_ENDPOINT = `https://photon.komoot.io/api/?q=`;
 type PhotonResult = {
@@ -87,7 +84,18 @@ useEffect(() => {
     const [lon, lat] = item.geometry.coordinates;
     setSelectedCoord([lon, lat]);
     setFollowUser(false);
-    // optional: keep the query text, but hide the list by blurring the input via the back arrow when you want
+    router.push({
+  pathname: '/preview',
+  params: {
+    name: item.properties.name,
+    lat: lat.toString(),
+    lon: lon.toString(),
+    city: item.properties.city,
+    country: item.properties.country,
+
+  },
+});
+    //load the information about the lcoation in a preview window
   };
 
 const searchPhoton = async (
