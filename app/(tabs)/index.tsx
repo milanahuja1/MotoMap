@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState, } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import SearchDropdown from '../../components/search-dropdown';
 
-const API_ENDPOINT = `https://photon.komoot.io/api/?q=`;
 type PhotonResult = {
   properties: {
     name: string;
@@ -90,8 +89,8 @@ useEffect(() => {
     name: item.properties.name,
     lat: lat.toString(),
     lon: lon.toString(),
-    city: item.properties.city,
-    country: item.properties.country,
+    city: item.properties.city ?? '',
+    country: item.properties.country ?? '',
 
   },
 });
@@ -105,21 +104,24 @@ const searchPhoton = async (
 ): Promise<PhotonResult[]> => {
   if (!query) return [];
 
-  const params = new URLSearchParams({
+  const qs = new URLSearchParams({
     q: query,
-    limit: '10',
+    limit: '8',
   });
 
   if (lat != null && lon != null) {
-    params.append('lat', lat.toString());
-    params.append('lon', lon.toString());
+    qs.set('lat', lat.toString());
+    qs.set('lon', lon.toString());
   }
 
-  const url = `https://photon.komoot.io/api/?${params.toString()}`;
-  const response = await fetch(url);
-  const json = await response.json();
+  const url = `http://13.61.74.42:3000/search?${qs.toString()}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Search failed: ${res.status}`);
+  }
 
-  return json.features;
+  const json = await res.json();
+  return json.features ?? [];
 };
 
 return (
