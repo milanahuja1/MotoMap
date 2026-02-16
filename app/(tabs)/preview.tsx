@@ -61,13 +61,31 @@ export default function Preview() {
   );
 }
 
-function startNavigation(lat: string, lon: string) {
-  // Placeholder – real routing logic will be implemented later
+async function startNavigation(lat: string, lon: string) {
   if (!lat || !lon) {
     console.log('No destination coordinates');
     return;
   }
-  console.log('Starting navigation to:', lat, lon);
+
+  try {
+    
+    const startLat = '-36.8485';
+    const startLon = '174.7633';
+
+    const url = `http://13.61.74.42:3000/route?startLat=${startLat}&startLon=${startLon}&endLat=${lat}&endLon=${lon}`;
+
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error(`Route failed: ${res.status}`);
+    }
+
+    const json = await res.json();
+
+    console.log('Route response:', json);
+  } catch (err) {
+    console.log('Route error:', err);
+  }
 }
 
 const styles = StyleSheet.create({
